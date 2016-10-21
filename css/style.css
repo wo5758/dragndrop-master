@@ -1,4 +1,7 @@
 /*style.css*/
+*{
+    box-sizing: border-box;
+}
 .wrap {
 	width: 100%;
 	position: relative;
@@ -96,4 +99,10 @@
     background-color: #fff;
     z-index: 9999;
     overflow: scroll;
+}
+
+.totalcount button{
+    height: 20px;
+    line-height: 20px;
+    padding: 0 12px;
 }

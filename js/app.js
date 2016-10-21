@@ -32,7 +32,8 @@ $("#cartbox").droppable({
             html+="<td>"+$(ui.draggable).children(".product-name").html()+"</td>";
             html+="<td>"+$(ui.draggable).children(".product-detail").html()+"</td>";
             html+="<td class='total'>"+$(ui.draggable).children(".product-price").html()+"</td>";
-            html+="<td class='count'>1</td></tr>";
+            html+="<td class='count'>1</td>";
+            html+="<td><button class='btn btn-warning' onclick='alldel(this)'>삭제</button></td></tr>";
             $("tbody").append(html);
         }
         total();
@@ -51,6 +52,12 @@ function del(i){
     total();
 };
 
+function alldel(d){
+    var getclass=$(d).parent().parent().attr("class").split(" ");
+    $("."+getclass[getclass.length-1]).remove();
+    total();
+};
+
 function total(){
     var totalcount=$("tbody>.totalcount");
     var total=0;
@@ -58,7 +65,6 @@ function total(){
         var sp=$(totalcount[i]).children(".total").html().split(",");
         sp=sp[0]+sp[1];
         total+=$(totalcount[i]).children(".count").html()*1*sp;
-//        console.log((totalcount[i].children(".total").html()*1)*(totalcount[i].children(".count").html()*1));
     }
     $("#total").html(total+"원");
 };
