@@ -22,26 +22,45 @@ $("#cartbox").droppable({
         $(ui.draggable).clone().appendTo(this);
         ++cartcount;
         var dataid=$("#cartbox>.product[data-id='"+$(ui.draggable).attr("data-id")+"']");
-        $("#cartbox>.product:last-child").attr("id","count"+cartcount).children("p").children("button").attr("onclick","del("+cartcount+")");
-        if(dataid.length>1){
+        $("#cartbox>.product:last-child").addClass("count"+$(ui.draggable).attr("data-id")).attr("id","count"+cartcount).children("p").children("button").attr("onclick","del("+cartcount+")");
+        if($(".count"+$(ui.draggable).attr("data-id")).length>1){
             var tr=$("tr[data-id='"+$(ui.draggable).attr("data-id")+"']>.count");
-            var count=tr.html(tr.html()*1+1);
+            tr.html(tr.html()*1+1);
         }else{
             var html="";
-            html+="<tr data-id='"+$(ui.draggable).attr("data-id")+"'><td>"+$(ui.draggable).attr("data-id")+"</td>";
+            html+="<tr class='totalcount count"+$(ui.draggable).attr("data-id")+"' data-id='"+$(ui.draggable).attr("data-id")+"'><td>"+$(ui.draggable).attr("data-id")+"</td>";
             html+="<td>"+$(ui.draggable).children(".product-name").html()+"</td>";
             html+="<td>"+$(ui.draggable).children(".product-detail").html()+"</td>";
-            html+="<td>"+$(ui.draggable).children(".product-price").html()+"</td>";
+            html+="<td class='total'>"+$(ui.draggable).children(".product-price").html()+"</td>";
             html+="<td class='count'>1</td></tr>";
             $("tbody").append(html);
         }
+        total();
     }
 });
 
 function del(i){
-    console.log(i);
     var count=$("#cartbox>.product#count"+i);
+    var getclass=count.attr("class").split(" ");
+    var tr=$("tr."+getclass[getclass.length-1]+" .count");
+    tr.html(tr.html()*1-1);
+    if(tr.html()=="0"){
+        $(tr=$("tr."+getclass[getclass.length-1])).remove();
+    }
     $("#cartbox>.product#count"+i).remove();
+    total();
+};
+
+function total(){
+    var totalcount=$("tbody>.totalcount");
+    var total=0;
+    for(i=0;i<totalcount.length;i++){
+        var sp=$(totalcount[i]).children(".total").html().split(",");
+        sp=sp[0]+sp[1];
+        total+=$(totalcount[i]).children(".count").html()*1*sp;
+//        console.log((totalcount[i].children(".total").html()*1)*(totalcount[i].children(".count").html()*1));
+    }
+    $("#total").html(total+"원");
 };
 
 function sethtml(result){
